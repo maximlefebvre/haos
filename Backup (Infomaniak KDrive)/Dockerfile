@@ -11,11 +11,11 @@ RUN apk add --no-cache \
     py3-requests
 
 # Copie du script Python
+COPY run.sh /run.sh
 COPY sync_kdrive.py /sync_kdrive.py
 
 # Copie du script de lancement
-COPY run.sh /
-RUN chmod a+x /run.sh
+RUN sed -i 's/\r$//' /run.sh && chmod a+x /run.sh
 
 # Dans les images HA, on utilise CMD pour lancer le script via s6
 CMD [ "/run.sh" ]
