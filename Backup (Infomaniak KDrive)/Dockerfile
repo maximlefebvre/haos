@@ -4,18 +4,18 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM
 
-# Installation des dépendances selon l'image de base HA (Alpine)
-RUN apk add --no-cache \
-    python3 \
-    py3-pip \
-    py3-requests
+# Installation des paquets nécessaires
+RUN apk add --no-cache python3 py3-pip py3-requests bash dos2unix
 
-# Copie du script Python
-COPY run.sh /run.sh
-COPY sync_kdrive.py /sync_kdrive.py
+# On se place dans un répertoire de travail clair
+WORKDIR /app
 
-# Copie du script de lancement
-RUN sed -i 's/\r$//' /run.sh && chmod a+x /run.sh
+# Copie des fichiers
+COPY run.sh .
+COPY sync_kdrive.py .
 
-# Dans les images HA, on utilise CMD pour lancer le script via s6
-CMD [ "/run.sh" ]
+# Conversion forcée du format de fichier (Windows -> Linux) et permissions
+RUN dos2unix run.sh && chmod +x run.sh
+
+# On utilise le chemin absolu vers le script
+CMD [ "/app/run.sh" ]

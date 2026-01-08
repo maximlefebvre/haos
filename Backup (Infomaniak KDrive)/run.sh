@@ -1,12 +1,11 @@
-#!/usr/bin/bash
+#!/usr/bin/with-contenv bashio
 
-# Récupération des options du config.yaml via jq
+# Debug : afficher où on est
+bashio::log.info "Chemin actuel : $(pwd)"
+
+# Récupération des options
 export KDRIVE_TOKEN=$(bashio::config 'kdrive_token')
 export KDRIVE_ID=$(bashio::config 'kdrive_id')
 
-echo "Démarrage de la synchronisation kDrive..."
-
-# On lance le script Python
-python3 /sync_kdrive.py
-
-echo "Synchronisation terminée."
+bashio::log.info "Lancement de Python..."
+python3 /app/sync_kdrive.py

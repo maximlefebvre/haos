@@ -1,6 +1,6 @@
 name: "kDrive Backup Sync"
 description: "Sauvegarde vos backups Home Assistant sur Infomaniak kDrive via API"
-version: "1.0.6"
+version: "1.0.7"
 slug: "kdrive_backup"
 arch:
   - aarch64
@@ -14,5 +14,4 @@ schema:
   kdrive_token: password
 map:
   - backup:rw # Donne accès au dossier des backups de HA
-init: false
-  
+init: true
