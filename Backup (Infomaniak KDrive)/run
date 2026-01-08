@@ -1,0 +1,14 @@
+#!/usr/bin/with-contenv bashio
+
+# Récupération des options
+export KDRIVE_TOKEN=$(bashio::config 'kdrive_token')
+export KDRIVE_ID=$(bashio::config 'kdrive_id')
+
+bashio::log.info "Démarrage du service de sync kDrive..."
+
+# On lance le script Python
+python3 /sync_kdrive.py
+
+# IMPORTANT : On arrête l'add-on une fois fini pour ne pas boucler
+bashio::log.info "Sync terminée, arrêt de l'add-on."
+bashio::addon.stop
