@@ -1,14 +1,23 @@
-# Utilise l'image Python officielle de Home Assistant (plus légère et adaptée)
-ARG BUILD_FROM=ghcr.io/home-assistant/amd64-base-python:3.12-alpine3.19
+# Utilisation de l'image de base Home Assistant (choisissez l'architecture adaptée)
+# Pour Raspberry Pi 4/5, utilisez : ghcr.io/home-assistant/aarch64-base:latest
+# Pour PC/Intel/NUC, utilisez : ghcr.io/home-assistant/amd64-base:latest
+ARG BUILD_FROM
 FROM $BUILD_FROM
 
-# Installation des dépendances Python (requests)
-RUN pip3 install requests
+# 1. Installation de Python et des outils nécessaires via apk
+RUN apk add --no-cache \
+    python3 \
+    py3-pip
 
-# Copie des fichiers
+# 2. Création d'un environnement virtuel (recommandé pour éviter les erreurs de "break-system-packages")
+# Ou plus simplement pour un add-on, forcer l'installation :
+RUN pip3 install --no-cache-dir requests --break-system-packages
+
+# 3. Copie des fichiers de votre projet
 COPY sync_kdrive.py /sync_kdrive.py
 COPY run.sh /run.sh
+
+# 4. Permissions
 RUN chmod a+x /run.sh
 
-# Commande de lancement
 CMD [ "/run.sh" ]
